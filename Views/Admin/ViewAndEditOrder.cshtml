@@ -1,0 +1,101 @@
+﻿@model  LexiElectronics.Models.Order
+@{
+    ViewData["Title"] = "View and Edit Order";
+}
+
+<partial name="adminMenuPartial" />
+<div class="ViewAndEditOrder adminPage">
+    
+    <h3 >Ordernr: @Model.Id</h3>
+    <p><strong>Orderdatum:</strong> @Model.OrderDate.ToShortDateString()</p>
+    <p><strong>Kundnamn:</strong> @Model.User.Firstname @Model.User.Lastname</p>
+    <p><strong>Epost:</strong> @Model.User.Email</p>
+    <p style="margin-bottom: 1.2rem;"><strong>Telefon:</strong> @Model.User.PhoneNumber</p>
+    
+    <p style="margin-bottom: 0rem;"><strong>Fakturaadress:</strong><p>
+    <p>@Model.User.InvoiceName</p>
+    <p>@Model.User.InvoiceStreetAddress</p>
+    <p style="margin-bottom: 1.2rem;">@Model.User.InvoiceZipcode @Model.User.InvoiceCity</p>
+
+    <p style="margin-bottom: 0rem;"><strong>Leveransadress:</strong><p>
+    <p>@Model.User.DeliveryName</p>
+    <p>@Model.User.DeliveryStreetAddress</p>
+    <p style="margin-bottom: 1.2rem;">@Model.User.DeliveryZipcode @Model.User.DeliveryCity</p>
+    
+    <form asp-action="SaveOrder">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="TotalSum" />
+        <input type="hidden" asp-for="FreightSum" />
+        <input type="hidden" asp-for="TotalSumToPay" />
+        <p style="margin-bottom: 1.2rem;"><strong>Belopp:</strong><span asp-for="TotalSum"> @Model.TotalSum kr</span></p>
+        <p style="margin-bottom: 1.2rem;"><strong>Frakt:</strong><span asp-for="FreightSum"> @Model.FreightSum kr</span></p>
+        <p style="margin-bottom: 1.2rem;"><strong>Belopp att betala:</strong><span asp-for="TotalSumToPay"> @Model.TotalSumToPay kr</span></p>
+        <p style="margin-bottom: 2rem;"><strong>Status:</strong>&nbsp;
+            <select id="statusSelect" asp-for="Status" class="selectTag">
+                <option value="Mottagen" selected="selected">Mottagen</option>
+                <option value="Pågående">Pågående</option>
+                <option value="Skickad">Skickad</option>
+            </select>
+        </p>
+       
+        <h4>Beställda produkter</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Produkt</th>
+                    <th>Antal</th>
+                    <th>Pris per enhet</th>
+                    <th>Totalpris</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i=0; i < @Model.OrderItems.Count; i++)
+                {                
+                    <tr>
+                        <td>@Model.OrderItems[i].Product.Name</td>
+                        <td>
+                            <input type="hidden" asp-for="OrderItems[i].Id" />        
+                            <input id=@i type="number" asp-for="@Model.OrderItems[i].Quantity" onchange="CalcTotalSums(@i)" style="width: 100px;" class="form-control" />
+                        </td>
+                        <td id="price_@i">@Model.OrderItems[i].Price kr</td>
+                        <td id="totalSum_@i">@(@Model.OrderItems[i].Quantity * @Model.OrderItems[i].Price) kr</td>
+                       <td style="width: 115px;">
+                            <button asp-action="RemoveOrderItem" asp-route-orderItemId="@Model.OrderItems[i].Id" asp-route-orderId="@Model.Id" class="redButton btn btn-primary">Ta bort</button>
+                       </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <input type="submit" style="float: right; width: 150px;" value="Spara" class="btn btn-success" />
+    </form>
+
+    <div>
+        
+        <a asp-action="Index">Tillbaka till orderlistan</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+
+    function CalcTotalSums(index)
+    {
+        var quantity = document.getElementById(index).value;
+        var price = document.getElementById("price_" + index).innerHTML;
+        var oldTotalSum = document.getElementById("totalSum_" + index).innerText
+        var newTotalSum = parseInt(quantity,10) * parseInt(price,10);
+        document.getElementById("totalSum_" + index).innerText =  newTotalSum;
+
+        var oldBelopp = document.getElementById("belopp").innerText;
+        document.getElementById("belopp").innerText = parseInt(oldBelopp,10) - parseInt(oldTotalSum,10) + parseInt(newTotalSum,10);
+
+    }
+</script>
+

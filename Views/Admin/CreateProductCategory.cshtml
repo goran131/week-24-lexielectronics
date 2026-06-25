@@ -1,0 +1,45 @@
+﻿@model LexiElectronics.Models.ProductCategory
+       
+@{
+    ViewData["Title"] = "View and Edit Order";
+}
+
+<partial name="adminMenuPartial" />
+<div class="adminPage">
+    <h2 class="adminHeader">Skapa en ny produktkategori</h2>
+    <form asp-controller="Admin" id="productCategory-form" asp-action="SaveCreatedProductCategory" method="post">
+        @Html.AntiForgeryToken()
+        <div style="max-width: 440px;">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    
+            <div class="mb-3">
+                <label asp-for="Name">Namn: *</label>
+                <input asp-for="Name" class="form-control" placeholder="Produktkategorins namn" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>               
+            
+            <div class="mb-3">
+                <label asp-for="Description">Beskrivning: *</label>
+                <textarea asp-for="Description" class="form-control" placeholder="Ange en beskrivning."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <button id="registerSubmit" type="submit" style="margin-top: 20px;" class="w-100 btn btn-lg btn-primary">
+                    Skapa produktkategori
+                </button>
+            </div>
+        </div> 
+    </form>
+    <a asp-action="AllProductCategories">Tillbaka till produktkategorilistan</a>
+   
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+

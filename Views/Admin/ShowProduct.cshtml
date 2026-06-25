@@ -1,0 +1,63 @@
+﻿@model  LexiElectronics.Models.Product
+@{
+    ViewData["Title"] = "View and Edit Order";
+}
+
+<partial name="adminMenuPartial" />
+<div class="adminPage">
+    
+    <div class="col-md-6">
+                
+            <p><strong>Namn:</strong>&nbsp; @Model.Name</p>
+            
+            <p><strong>Artikelnr:</strong>&nbsp; @Model.ArticleNo</p>
+            
+            <p style="margin-bottom: 0px;"><strong>Beskrivning:</strong></p>
+            <p>@Model.LongDescription </p>
+
+            <p><strong>Filnamn för bild:</strong>&nbsp; @Model.ImageFilename</p>
+            
+            <p><strong>Pris:</strong>&nbsp; @Model.Price kr</p>
+            
+            <p><strong>Antal i lager:</strong>&nbsp; @Model.Stock</p>
+
+            <p><strong>Produktkategori:</strong>&nbsp; @Model.Category.Name</p>
+
+            <p><strong>Tillverkare:</strong>&nbsp; @Model.Manufacturer.BrandName</p>
+            @if (Model.VisibleInShop == true)
+            {
+                <p><strong>Säljs i webshopen:</strong>&nbsp; Ja</p>
+            }
+            else 
+            {
+                <p><strong>Säljs i webbutiken:</strong>&nbsp; Nej</p>
+            }
+
+               
+
+        <a asp-action="AllProducts">Tillbaka till produktlistan</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+
+    function CalcTotalSums(index)
+    {
+        var quantity = document.getElementById(index).value;
+        var price = document.getElementById("price_" + index).innerHTML;
+        var oldTotalSum = document.getElementById("totalSum_" + index).innerText
+        var newTotalSum = parseInt(quantity,10) * parseInt(price,10);
+        document.getElementById("totalSum_" + index).innerText =  newTotalSum;
+
+        var oldBelopp = document.getElementById("belopp").innerText;
+        document.getElementById("belopp").innerText = parseInt(oldBelopp,10) - parseInt(oldTotalSum,10) + parseInt(newTotalSum,10);
+
+    }
+</script>
+

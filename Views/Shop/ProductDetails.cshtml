@@ -1,0 +1,24 @@
+@model LexiElectronics.Models.Product
+@{
+    ViewData["Title"] = Model.Name;
+}
+<div class="mainPage">
+    <div>
+        <img src="~/images/@Model.ImageFilename" style="margin: 15px 0 30px;" width="600px" />
+    </div>
+    <div style="float: left; margin-bottom: 10px;">
+    <h2>@Model.Name</h2>
+    <p style="max-width: 620px;">@Model.LongDescription</p>
+    <p><strong>@Model.Price kr</strong></p>
+    </div>
+    <form asp-controller="Shop" asp-action=AddToCart" method="post">
+        <input type="hidden" name="productId" value="@Model.Id" />
+
+        <div class="mb-3" style="clear: both;">
+            <label for="quantity">Antal</label>
+            <input type="number" name="quantity" value="@Model.Quantity" style="width: 60px; float: left; margin-right: 8px;" class="form-control" />
+        </div>
+        <button style="margin-right: 5px; margin-top: -20px;" class="btn btn-success">Lägg i vaurkorgen</button>
+        <a style="margin-top: -20px;" class="btn btn-secondary" asp-action="Index">Tillbaka</a>
+    </form>
+</div>

@@ -1,0 +1,132 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<LexiElectronics.Models.Order>
+
+@{
+    ViewData["Title"] = "Admin home Page";
+}
+
+<partial name="adminMenuPartial" />
+
+<div class="adminPage">
+    
+    <h1 class="display-4">Välkommen!</h1>
+    <p>Detta är LexiElectronics adminavdelning.</p>
+    <h4 class="adminHeader2">Nya ordrar</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ordernr</th>
+                <th>Kundnamn</th>
+                <th>Orderdatum</th>
+                <th>Belopp</th>
+                <th>Status</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                @if (order.Status == "Mottagen")
+                {
+                    <tr>
+                        <td>@order.Id</td>
+                        <td>@order.User.Firstname @order.User.Lastname</td>
+                        <td>@order.OrderDate.ToShortDateString()</td>
+                        <td>@order.TotalSumToPay kr</td>
+                        <td>@order.Status</td>
+                        <td style="width: 115px;">
+                            <a href="@Url.Action("ViewAndEditOrder", new { id = order.Id })" class="btn btn-primary">Visa order</a>
+                        </td>
+                        <form asp-controller="Admin" asp-action="RemoveOrder" method="post">
+                            <input type="hidden" name="orderId" value="@order.Id" />
+                            <td style="width: 100px;">
+                                <button type="submit" onclick="ConfirmOrderRemoval(event)" class="redButton btn btn-primary">Ta bort</button>
+                            </td>
+                        </form>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <h4 class="adminHeader2">Ordrar under behandling</h4>
+     <table class="table">
+        <thead>
+            <tr>
+                <th>Ordernr</th>
+                <th>Kundnamn</th>
+                <th>Orderdatum</th>
+                <th>Belopp</th>
+                <th>Status</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                @if (order.Status == "Pågående")
+                {
+                    <tr>
+                        <td>@order.Id</td>
+                        <td>@order.User.Firstname @order.User.Lastname</td>
+                        <td>@order.OrderDate.ToShortDateString()</td>
+                        <td>@order.TotalSumToPay kr</td>
+                        <td>@order.Status</td>
+                        <td style="width: 115px;">
+                            <a href="@Url.Action("ViewAndEditOrder", new { id = order.Id })" class="btn btn-primary">Visa order</a>
+                        </td>
+                        <form asp-controller="Admin" asp-action="RemoveOrder" method="post">
+                            <input type="hidden" name="orderId" value="@order.Id" />
+                            <td style="width: 100px;">
+                                <button type="submit" onclick="ConfirmOrderRemoval(event)" class="redButton btn btn-primary">Ta bort</button>
+                            </td>
+                        </form>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <h4 class="adminHeader2">Skickade ordrar</h4>
+     <table class="table">
+        <thead>
+            <tr>
+                <th>Ordernr</th>
+                <th>Kundnamn</th>
+                <th>Orderdatum</th>
+                <th>Belopp</th>
+                <th>Status</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                @if (order.Status == "Skickad")
+                {
+                    <tr>
+                        <td>@order.Id</td>
+                        <td>@order.User.Firstname @order.User.Lastname</td>
+                        <td>@order.OrderDate.ToShortDateString()</td>
+                        <td>@order.TotalSumToPay kr</td>
+                        <td>@order.Status</td>
+                        <td style="width: 115px;">
+                            <a href="@Url.Action("ViewAndEditOrder", new { id = order.Id })" class="btn btn-primary">Visa order</a>
+                        </td>
+                        <form asp-controller="Admin" asp-action="RemoveOrder" method="post">
+                            <input type="hidden" name="orderId" value="@order.Id" />
+                            <td style="width: 100px;">
+                                <button type="submit" onclick="ConfirmOrderRemoval(event)" class="redButton btn btn-primary">Ta bort</button>
+                            </td>
+                        </form>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

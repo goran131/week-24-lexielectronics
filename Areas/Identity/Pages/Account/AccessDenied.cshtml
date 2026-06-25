@@ -1,0 +1,10 @@
+@page
+@model AccessDeniedModel
+@{
+    ViewData["Title"] = "Inget Tillträde";
+}
+
+<header class="noAccessHeader">
+    <h1 class="text-danger">@ViewData["Title"]</h1>
+    <p class="text-white">Du har inte tillgång till den här resursen.</p>
+</header>

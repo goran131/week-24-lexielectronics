@@ -1,0 +1,56 @@
+﻿@model LexiElectronics.Models.DTOs.ShoppingCartDto;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="mainPage">
+    <h3 class="page-header">Detta är din varukorg</h3>
+
+    @if (@Model.CartItems.Count > 0)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Produkt</th>
+                    <th>Antal</th>
+                    <th>Pris per enhet</th>
+                    <th>Totalpris</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>       
+                @foreach (var cartItem in Model.CartItems)
+                {
+                    <tr>
+                        <td>@cartItem.ProductName</td>
+                        <td>
+                            @cartItem.Quantity
+                            @*<input type="number" name="quantity" asp-for="@cartItem.Quantity" style="width: 100px;" class="form-control" />*@
+                        </td>
+                        <td>@cartItem.Price</td>
+                        <td>@cartItem.TotalSum</td>
+                        <form asp-controller="Shop" asp-action="RemoveCartItem" method="post">
+                            <input type="hidden" name="productId" value="@cartItem.ProductId"/>
+                            <td style="width: 115px;"><button type="submit" class="redButton btn btn-primary">Ta bort</button></td>
+                        </form>
+                    </tr>
+                }
+                <tr style="border-bottom: 1px #fff solid;">
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right;">Summa: </td>
+                    <td>@Model.TotalSum kr</td>
+                    <td></td>
+               </tr>
+            </tbody>
+        </table>
+
+         <a asp-action="Index">Fortsätt handla</a>
+
+    }
+    else
+    {
+        <div style="margin-top: 30px;">Det finns inga produkter i varukorgen. <a asp-action="Index">Fortsätt handla</a></div>
+    }
+</div>

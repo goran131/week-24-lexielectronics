@@ -1,0 +1,65 @@
+﻿@model IEnumerable<LexiElectronics.Models.Manufacturer>
+       
+@{
+    ViewData["Title"] = "All manufacturers";
+}
+
+<partial name="adminMenuPartial" />
+<div class="adminPage">
+    <h2 class="adminHeader">Alla tillverkare</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Märke</th>
+                <th>Företagsnamn</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>       
+            @foreach (var manufacturer in Model)
+            {
+                <tr>
+                    <td>@manufacturer.BrandName</td>
+
+                    <td>@manufacturer.CompanyName</td>
+
+                    <td style="width: 65px; padding: .5rem .4rem;">
+                        <a asp-action="EditManufacturer" asp-route-id="@manufacturer.Id" class="btn btn-primary">Ändra</a>
+                    </td>
+                    
+                    @if (manufacturer.NbrOfProducts == 0)
+                    {
+                        <form asp-controller="Admin" asp-action="RemoveManufacturer" method="post">
+                            <input type="hidden" name="Id" value="@manufacturer.Id"/>
+                            <td style="width: 92px; padding: .5rem .4rem;">
+                                <button type="submit" class="redButton btn btn-primary">Ta bort</button>
+                            </td>
+                        </form>
+                    }
+                    else {
+                        <td style="width: 92px; padding: .5rem .4rem;">
+                            <button type="submit" class="redButton btn btn-primary" disabled>Ta bort</button>
+                        </td>
+                    }
+
+                </tr>
+            }
+               
+        </tbody>
+    </table>
+
+    <p style="float: right; margin-top: 10px;">Det går bara att ta bort tillverkare som inte har några produkter tilldelade.</p>
+  
+
+    <div class="mb-3">
+        <a asp-controller="Admin" asp-action="CreateManufacturer" style="margin-top: 20px;" class="btn btn-primary">
+            Skapa ny tillverkare
+        </a>
+    </div>
+    <a asp-action="Index">Tillbaka till orderlistan</a>
+   
+</div>
+
+
+

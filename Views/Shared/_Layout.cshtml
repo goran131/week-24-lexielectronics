@@ -1,0 +1,88 @@
+﻿@using Microsoft.AspNetCore.Identity 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LexiElectronics</title>
+    <script type="importmap"></script>
+    <script href="~/js/site.js"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LexiElectronics.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img class="logotype" src="~/images/logotype.webp" />
+                    <img class="logotype-small" src="~/images/logotype-small.webp" />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="Shop" asp-controller="/Shop" asp-action="Index">Våra produkter</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="Home" asp-controller="/Home" asp-action="ContactUs">Kontakt</a>
+                        </li>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="Shop" asp-controller="/Shop" asp-action="MyOrders">Mina ordrar</a>
+                            </li>
+                        }
+                        </ul>
+                    <div class="cartCheckoutText">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="/Shop" asp-action="ShoppingCart">Varukorg</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="/Shop" asp-action="Index">Kassa</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="cartCheckoutButtons">
+                        <a asp-action="ShoppingCart" asp-controller="/Shop">
+                            <img class="cartImage" src="~/images/varuvagn-vit.webp" width="36px" />
+                        </a>
+                        <a asp-action="Checkout" asp-controller="/Shop">
+                            <img class="checkoutImage" src="~/images/kassa-vit.webp" width="42px" />
+                        </a>
+                    </div>
+
+                   
+                    <partial name="_LoginPartial" />
+                 
+                    @if (User.Identity?.IsAuthenticated == true && (User.IsInRole("AdminManager") || User.IsInRole("ShopManager")))
+                    {
+                        <a class="nav-link" style="color: yellow; margin-right: 10px;" asp-controller="Admin" asp-action="Index">Admin</a>
+                    }                     
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-white">
+        <div class="container">
+            &copy; 2026 - LexiElectronics - <a asp-area="" asp-controller="Home" asp-action="Index">Våra produkter</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

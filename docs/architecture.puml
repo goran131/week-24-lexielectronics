@@ -1,0 +1,133 @@
+@startuml
+' LexiElectronics high-level class diagram
+skinparam classAttributeIconSize 0
+
+package Controllers {
+  class AdminController {
+	+Index()
+	+ViewAndEditOrder(id)
+	+AllProducts()
+	+ShowProduct(id)
+	+CreateProduct()
+	+SaveCreatedProduct(product)
+	+EditProduct(id)
+	+SaveEditedProduct(product)
+	+AllProductCategories()
+	+CreateProductCategory()
+	+SaveCreatedProductCategory(productCategory)
+	+EditProductCategory(id)
+	+SaveEditedProductCategory(productCategory)
+	+RemoveProductCategory(id)
+	+SaveOrder(order)
+	+RemoveOrder(orderId)
+	+RemoveOrderItem(orderId, orderItemId)
+	+AllUsers()
+	+ShowUser(id)
+	+EditUser(id)
+	+SaveEditedUser(user)
+	-UpdateUserRoleAsync(userId, newRoleId)
+	-IsUserloggedIn()
+  }
+}
+
+package Models {
+  class Product {
+	+int Id
+	+string Name
+	+string ArticleNo
+	+string ShortDescription
+	+string LongDescription
+	+decimal Price
+	+int Stock
+	+string? ImageFilename
+	+IFormFile? ImageFile
+	+int ProductCategoryId
+	+int ManufacturerId
+	+bool VisibleInShop
+	+ProductCategory Category
+	+Manufacturer Manufacturer
+  }
+
+  class ProductCategory {
+	+int Id
+	+string Name
+	+string Description
+	+List<Product> Products
+  }
+
+  class Manufacturer {
+	+int Id
+	+string BrandName
+  }
+
+  class ApplicationUser {
+	+string Id
+	+string Firstname
+	+string Lastname
+	+string Email
+	+string PhoneNumber
+	+string InvoiceName
+	+string InvoiceStreetAddress
+	+string InvoiceZipcode
+	+string InvoiceCity
+	+string? DeliveryName
+	+string? DeliveryStreetAddress
+	+string? DeliveryZipcode
+	+string? DeliveryCity
+	+bool Access
+	+string? UserRoleId
+	+string? UserRoleName
+  }
+
+  class Order {
+	+int Id
+	+string UserIdStr
+	+ApplicationUser User
+	+DateTime OrderDate
+	+int TotalSum
+	+string Status
+	+List<OrderItem> OrderItems
+  }
+
+  class OrderItem {
+	+int Id
+	+int OrderId
+	+int ProductId
+	+int Quantity
+	+decimal Price
+	+Product Product
+  }
+
+  class ProductVM {
+	+Product Product
+	+List<SelectListItem> ProductCategoryListItems
+	+List<SelectListItem> ManufacturerListItems
+  }
+
+  class ProductCategoriesVM {
+	+List<ProductCategory> ProductCategoriesList
+	+ProductCategory NewProductCategory
+  }
+}
+
+' Associations
+ProductCategory "1" -- "*" Product : contains
+Manufacturer "1" -- "*" Product : manufactures
+ApplicationUser "1" -- "*" Order : places
+Order "1" -- "*" OrderItem : includes
+Product "1" -- "*" OrderItem : referencedBy
+
+' Identity tables (simplified)
+class AspNetUsers
+class AspNetRoles
+class AspNetUserRoles
+AspNetUsers "1" -- "*" AspNetUserRoles
+AspNetRoles "1" -- "*" AspNetUserRoles
+
+' Notes
+note left of AdminController
+Uses ApplicationDbContext, UserManager, RoleManager,
+SignInManager and IWebHostEnvironment
+end note
+
+@enduml

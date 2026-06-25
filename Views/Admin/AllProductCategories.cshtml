@@ -1,0 +1,66 @@
+﻿@model IEnumerable<LexiElectronics.Models.ProductCategory>
+       
+@{
+    ViewData["Title"] = "View and Edit Order";
+}
+
+<partial name="adminMenuPartial" />
+<div class="adminPage">
+    <h2 class="adminHeader">Alla produktkategorier</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Produktkategori</th>
+                <th>Beskrivning</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>       
+            @foreach (var productCategory in Model)
+            {
+                <tr>
+                    <td>@productCategory.Name</td>
+
+                    <td>@productCategory.Description</td>
+
+                    <td style="width: 65px; padding: .5rem .4rem;">
+                        <a asp-action="EditProductCategory" asp-route-id="@productCategory.Id" class="btn btn-primary">Ändra</a>
+                    </td>
+                    
+                    @if (productCategory.Products.Count == 0)
+                    {
+                        <form asp-controller="Admin" asp-action="RemoveProductCategory" method="post">
+                            <input type="hidden" name="Id" value="@productCategory.Id"/>
+                            <td style="width: 92px; padding: .5rem .4rem;">
+                                <button type="submit" class="redButton btn btn-primary">Ta bort</button>
+                            </td>
+                        </form>
+                    }
+
+                </tr>
+            }
+               
+        </tbody>
+    </table>
+
+    <p style="float: right; margin-top: 10px;">Det går bara att ta bort produktkategorier som inte har några produkter tilldelade.</p>
+  
+
+    <div class="mb-3">
+        <a id="createProductCategory" asp-controller="Admin" asp-action="CreateProductCategory" style="margin-top: 20px;" class="btn btn-primary">
+            Skapa ny produktkategori
+        </a>
+    </div>
+    <a asp-action="Index">Tillbaka till orderlistan</a>
+   
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+

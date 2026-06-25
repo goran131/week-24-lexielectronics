@@ -1,0 +1,105 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model LexiElectronics.Models.ViewModels.CheckoutVM;
+@{
+    ViewData["Title"] = "Checkout Page";
+}
+
+<div class="mainPage checkout-page">
+    <h1 class="page-header">Kassa</h1>
+
+    <div class="col-md-4" style="float: left; margin-right: 30px;  margin-bottom: 25px;">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+        <div class="mb-3">
+            <span><strong>Namn:</strong> @Model.User.Firstname @Model.User.Lastname</span>
+        </div>
+
+        <div class="mb-3">
+            <span><strong>Teleonnr: </strong>@Model.User.PhoneNumber</span>
+        </div>
+
+        <div class="mb-3">
+            <span><strong>Epost: </strong>@Model.User.Email</span>
+        </div>
+        <br/>
+        <div class="mb-3">
+            <span><strong>Summa: </strong>@Model.TotalSum kr</span>
+        </div>
+        <div class="mb-3">            
+            <span><strong>Frakt: </strong>@Model.FreightSum kr (Fraktfritt över 500 kr)</span>
+        </div>
+        <div class="mb-3">
+            <span><strong>Att betala: @Model.TotalSumToPay kr</strong> (Varav moms: @Model.Moms kr)</span>
+        </div>
+    </div>
+
+    <div class="col-md-4" style="float: left; margin-bottom: 25px;">
+        <div><strong>Fakturaadress:</strong></div>
+        <div class="mb-3">
+            <span>@Model.User.InvoiceName </span>
+        </div>
+        <div class="mb-3">
+            <span>@Model.User.InvoiceStreetAddress</span>
+        </div>
+        <div class="mb-3">
+            <span>@Model.User.InvoiceZipcode  @Model.User.InvoiceCity</span>
+        </div>
+    
+
+        <div style="margin-top: 25px;"><strong>Leveransadress:</strong></div>
+        <div class="mb-3">
+           <span>@Model.User.DeliveryName </span>
+        </div>
+        <div class="mb-3">
+           <span>@Model.User.DeliveryStreetAddress</span>
+        </div>
+        <div class="mb-3">
+            <span>@Model.User.DeliveryZipcode @Model.User.DeliveryCity</span>
+        </div>
+    
+        @if (@Model.DeliveryAddressExists == false)
+        {
+            <a asp-area="Identity" asp-page="/Account/Manage/Index" asp-route-returnUrl="@Model.ReturnUrl">Klicka här om du vill lägga till en leveransdress</a>
+        }
+    </div>
+    @if (@Model.cartDto.CartItems.Count > 0)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Produkt</th>
+                    <th>Antal</th>
+                    <th>Pris per enhet</th>
+                    <th>Totalpris</th>
+           
+            </thead>
+            <tbody>
+                @foreach (var cartItem in Model.cartDto.CartItems)
+                {
+                    <tr>
+                        <td>@cartItem.ProductName</td>
+                        <td>@cartItem.Quantity</td>
+                        <td>@cartItem.Price kr</td>
+                        <td>@cartItem.TotalSum kr</td>
+                        @*<td style="width: 115px;"><button asp-action="RemoveOrderItem" asp-route-index="@i" class="btn btn-primary">Ta bort</button></td>*@
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <form asp-action="SendOrder" method="post">
+            <button type="submit" style="float: right; width: 180px;" class="btn btn-success">Skicka order</button>
+        </form>
+    }
+    else
+    {
+        <div style="margin-top: 30px; clear: both;">
+            <strong>Det finns inga produkter på denna ordern.</strong>
+            <a asp-action="Index"> Fortsätt handla</a>
+        </div>
+    }
+ 
+</div>
+

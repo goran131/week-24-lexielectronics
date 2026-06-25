@@ -1,0 +1,19 @@
+@page
+@model LockoutModel
+@{
+    ViewData["Title"] = "Avstängt";
+}
+
+<header class="lockedOutHeader">
+    <h1 class="text-danger">@ViewData["Title"]</h1>
+    @if (Model.IsPermanentlyLockedOut == false){
+        <p class="text-white">Detta kontot har blivit avstängt, försök igen senare.</p>
+    }
+    else
+    {
+        <p class="text-white">
+            Detta kontot är avstängt. Om du anser att det är fel kontakta <a href="/Home/ContactUs">LexiElectronics kundtjänst</a>
+        </p>
+    }
+
+</header>

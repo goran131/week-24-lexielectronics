@@ -1,0 +1,131 @@
+﻿@model  LexiElectronics.Models.ViewModels.ProductVM
+@{
+    ViewData["Title"] = "View and Edit Order";
+}
+
+ <partial name="adminMenuPartial" />
+
+ <div class="adminPage">
+
+    <h2 class="adminHeader">Ändra produkt:</h2>
+    <div class="col-md-6">
+        <form id="product-form" asp-action="SaveEditedProduct" method="post" enctype="multipart/form-data">      
+            <input asp-for="Id" type="hidden" />
+            
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    
+            <div class="mb-3">
+                <label asp-for="Name">Namn: *</label>
+                <input asp-for="Name" class="form-control" placeholder="Produktens namn" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>               
+                
+            <div class="mb-3">
+                <label asp-for="ArticleNo">Artikelnr: *</label>
+                <input asp-for="ArticleNo" class="form-control" placeholder="Ange artikelnr." />
+                <span asp-validation-for="ArticleNo" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ShortDescription">Kort beskrivning (max 125 tecken): *</label>
+                <textarea asp-for="ShortDescription" class="form-control" placeholder="Ange en beskrivning."></textarea>
+                <span asp-validation-for="ShortDescription" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="LongDescription">Lång beskrivning: * (Visas aldrig samtidigt som kort beskrivning)</label>
+                <textarea asp-for="LongDescription" class="form-control" placeholder="Ange en beskrivning." rows="10"></textarea>
+                <span asp-validation-for="LongDescription" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <p>Filnamn för uppladdad bild: 
+                    @if (string.IsNullOrEmpty(@Model.ImageFilename) == false) {
+                       <strong>&nbsp;@Model.ImageFilename</strong> 
+                    }
+                    else {
+                        <strong>&nbsp;Ingen bild är uppladdad.</strong>
+                    }
+                </p>
+                <input asp-for="ImageFilename" type="hidden" />
+            </div>
+ 
+            <div class="mb-3">
+                <label asp-for="ImageFile" class="control-label">Ladda upp en produktbild</label>
+                <input type="file" asp-for="ImageFile" class="form-control" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+               
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Price">Pris:</label>
+                <input asp-for="Price" class="form-control" placeholder="Ange priset." />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+                
+            <div class="mb-3">
+                <label asp-for="Stock">Antal i lager:</label>
+                <input asp-for="Stock" class="form-control" placeholder="Ange antal i lager." />
+                <span asp-validation-for="Stock" class="text-danger"></span>
+            </div>
+             
+            <div class="mb-3">
+                <label asp-for="ProductCategoryId">Produktkategori:</label>
+                <select id="categorySelect" class="select-control" style="width: 240px;" asp-for="ProductCategoryId" asp-items="Model.ProductCategoryListItems"></select>
+                <span asp-validation-for="ProductCategoryId" class="text-danger"></span>
+            </div>
+                
+               
+            <div class="mb-3">
+                <label asp-for="ManufacturerId">Tillverkare:</label>
+                <select id="manuFacturerSelect" class="select-control" style="width: 240px;" asp-for="ManufacturerId" asp-items="Model.ManufacturerListItems"></select>
+                <span asp-validation-for="ManufacturerId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="VisibleInShop">Ska produkten säljas i webshopen:</label>
+              
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="VisibleInShop" type="radio" value="true" id="VisibleInShop_True" />
+                    <label class="form-check-label" for="VisibleInShop_True">Ja</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="VisibleInShop" type="radio" value="false" id="VisibleInShop_False" />
+                    <label class="form-check-label" for="VisibleInShop_False">Nej</label>
+                </div>
+
+                <span asp-validation-for="VisibleInShop" class="text-danger"></span>             
+            </div>
+               
+            <div class="mb-3">                    
+                <button id="registerSubmit" type="submit" style="margin-top: 20px;" class="w-100 btn btn-lg btn-primary">Spara produkt</button>
+            </div>
+        </form>
+   
+        <a asp-action="AllProducts">Tillbaka till produktlistan</a>
+    
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+
+    function CalcTotalSums(index)
+    {
+        var quantity = document.getElementById(index).value;
+        var price = document.getElementById("price_" + index).innerHTML;
+        var oldTotalSum = document.getElementById("totalSum_" + index).innerText
+        var newTotalSum = parseInt(quantity,10) * parseInt(price,10);
+        document.getElementById("totalSum_" + index).innerText =  newTotalSum;
+
+        var oldBelopp = document.getElementById("belopp").innerText;
+        document.getElementById("belopp").innerText = parseInt(oldBelopp,10) - parseInt(oldTotalSum,10) + parseInt(newTotalSum,10);
+
+    }
+</script>
+

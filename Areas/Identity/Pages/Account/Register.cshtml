@@ -1,0 +1,159 @@
+@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<partial name="~/Views/Admin/adminMenuPartial.cshtml" />
+
+<div class="row adminPage" >
+     @if (User.Identity?.IsAuthenticated == true && (User.IsInRole("AdminManager"))) {
+         <h2> Registrera en ny användare</h2>
+     }
+     else {
+         <h2>Skapa ett nytt konto.</h2>
+     }
+    
+    <hr />
+    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <div class="col-md-4" style="float: left; margin-right: 30px; margin-top: 25px;">
+           
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            @if (User.Identity?.IsAuthenticated == true && (User.IsInRole("AdminManager")))
+            {
+                <div class="mb-3">
+                    <label asp-for="Input.UserRoleId">Användarroll</label>
+                    <select id="userRoleSelect" class="select-control" style="width: 240px;" asp-for="Input.UserRoleId" asp-items="Model.UserRoleListItems"></select>
+                </div>    
+            }
+            <div class="mb-3">                
+                <label asp-for="Input.Firstname">Förnam: *</label>
+                <input asp-for="Input.Firstname" class="form-control" aria-required="true" placeholder="Ditt förnamn" />                
+                <span asp-validation-for="Input.Firstname" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Input.Lastname">Efternamn: *</label>
+                <input asp-for="Input.Lastname" class="form-control" aria-required="true" placeholder="Ditt efternamn" />
+                <span asp-validation-for="Input.Lastname" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Input.PhoneNumber">Telefonnr</label>
+                <input asp-for="Input.PhoneNumber" class="form-control" aria-required="false" placeholder="Ditt telefonnr" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Input.Email">Epost: *</label>
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="namn@example.com" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Input.Password">Lösenord: *</label>
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Ditt lösenord" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Input.ConfirmPassword">Bekräfta lösenord: *</label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Bekräfta ditt lösenord" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4" style="float: left;">
+            <div><strong>Fakturaadress:</strong></div>
+            <div class="mb-3">
+                <label asp-for="Input.InvoiceName">Namn: *</label>
+                <input asp-for="Input.InvoiceName" class="form-control" aria-required="true" placeholder="Ditt namn" />
+                <span asp-validation-for="Input.InvoiceName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Input.InvoiceStreetAddress">Gatuadress: *</label>
+                <input asp-for="Input.InvoiceStreetAddress" class="form-control" aria-required="true" placeholder="Din gatuadress" />
+                <span asp-validation-for="Input.InvoiceStreetAddress" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3" style="float: left;">
+                <div style="float: left; width: 28%; margin-right: 20px;">
+                    <label asp-for="Input.InvoiceZipcode">Postnummer: *</label>
+                    <input asp-for="Input.InvoiceZipcode" class="form-control" aria-required="true" placeholder="Ditt postnr" />
+                    <span asp-validation-for="Input.InvoiceZipcode" class="text-danger"></span>
+                </div>
+                <div style="float: left; width:66%;">
+                    <label asp-for="Input.InvoiceCity">Ort: *</label>
+                    <input asp-for="Input.InvoiceCity" class="form-control" aria-required="true" placeholder="Din ort" />
+                    <span asp-validation-for="Input.InvoiceCity" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div style="margin-top: 25px;"><strong>Leveransadress:</strong></div>
+            <div class="mb-3">
+                <label asp-for="Input.DeliveryName">Namn</label>
+                <input asp-for="Input.DeliveryName" class="form-control" aria-required="false" placeholder="Ditt namn" />
+                <span asp-validation-for="Input.DeliveryName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Input.DeliveryStreetAddress">Gatuadress</label>
+                <input asp-for="Input.DeliveryStreetAddress" class="form-control" aria-required="false" placeholder="Din gatuadress" />
+                <span asp-validation-for="Input.DeliveryStreetAddress" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <div style="float: left; width: 28%; margin-right: 20px;">
+                    <label asp-for="Input.DeliveryZipcode">Postnummer</label>
+                    <input asp-for="Input.DeliveryZipcode" class="form-control" aria-required="false" placeholder="Ditt postnr" />
+                    <span asp-validation-for="Input.DeliveryZipcode" class="text-danger"></span>
+                </div>
+                <div style="float: left; width: 66%;">
+                    <label asp-for="Input.DeliveryCity">Ort</label>
+                    <input asp-for="Input.DeliveryCity" class="form-control" aria-required="false" placeholder="Din ort" />
+                    <span asp-validation-for="Input.DeliveryCity" class="text-danger"></span>
+                </div>
+            </div>
+            
+            
+            <button id="registerSubmit" type="submit" style="margin-top: 20px;" class="w-100 btn btn-lg btn-primary">Registrera</button>
+        </div>
+     </form>
+    
+    
+    @*
+    <div class="col-md-6 col-md-offset-2">
+        <section>
+            <h3>Use another service to register.</h3>
+            <hr />
+            
+                @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                            about setting up this ASP.NET application to support logging in via external services</a>.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins!)
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+        *@
+    </div>
+   
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

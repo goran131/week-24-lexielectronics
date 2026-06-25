@@ -1,0 +1,56 @@
+﻿@model IEnumerable<LexiElectronics.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Show all users";
+}
+
+<partial name="adminMenuPartial" />
+<div class="adminPage">
+    <h2 class="adminHeader">Alla användare</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Namn</th>
+                <th>Användarnamn</th>
+                <th>Epost</th>
+                <th>Användarroll</th>
+
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Firstname @user.Lastname</td>
+
+                    <td>@user.UserName </td>
+
+                    <td>@user.Email</td>
+
+                    <td>@user.UserRoleName</td>
+
+                    <td style="width: 45px; padding: .5rem .3rem;">
+                        <a asp-action="ShowUser" asp-route-id="@user.Id" style="padding: 6px 8px;" class="btn btn-primary">Visa</a>                       
+                    </td>
+
+                    <td style="width: 65px; padding: .5rem .3rem;">
+                        <a asp-action="EditUser" asp-route-id="@user.Id" style="padding: 6px 8px;" class="btn btn-primary">Ändra</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <a asp-action="Index">Tillbaka till orderlistan</a>
+</div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

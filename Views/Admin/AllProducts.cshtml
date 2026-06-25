@@ -1,0 +1,69 @@
+﻿@model IEnumerable<LexiElectronics.Models.Product>
+       
+@{
+    ViewData["Title"] = "View and Edit Order";
+}
+
+<partial name="adminMenuPartial" />
+<div class="adminPage">
+    <h2 class="adminHeader">Alla produkter</h2>
+    <table class="table">
+            <thead>
+                <tr>
+                    <th>Produkt</th>
+                    <th>Artikelnr</th>
+                    <th>Pris</th>
+                    <th>Produktkategori</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>       
+                @foreach (var product in Model)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+
+                        <td>@product.ArticleNo </td>
+                        
+                        <td>@product.Price</td>
+
+                        <td>@product.Category.Name</td>
+                        
+                        <td style="width: 50px; padding: .5rem .4rem;"><a asp-action="ShowProduct" asp-route-id="@product.Id" class="btn btn-primary">Visa</a></td>
+
+                        <td style="width: 65px; padding: .5rem .4rem;"><a asp-action="EditProduct" asp-route-id="@product.Id" class="btn btn-primary">Ändra</a></td>
+
+                    </tr>
+                }
+               
+            </tbody>
+        </table>
+        
+        <a asp-action="Index">Tillbaka till orderlistan</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+
+    function CalcTotalSums(index)
+    {
+        var quantity = document.getElementById(index).value;
+        var price = document.getElementById("price_" + index).innerHTML;
+        var oldTotalSum = document.getElementById("totalSum_" + index).innerText
+        var newTotalSum = parseInt(quantity,10) * parseInt(price,10);
+        document.getElementById("totalSum_" + index).innerText =  newTotalSum;
+
+        var oldBelopp = document.getElementById("belopp").innerText;
+        document.getElementById("belopp").innerText = parseInt(oldBelopp,10) - parseInt(oldTotalSum,10) + parseInt(newTotalSum,10);
+
+    }
+</script>
+

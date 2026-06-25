@@ -1,0 +1,32 @@
+@model IEnumerable<LexiElectronics.Models.Product>
+@{
+    ViewData["Title"] = "Webshop";
+}
+
+<div class="mainPage shopIndex">
+    <h1 class="page-header">Produkter</h1>
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <img class="productImage" src="~/images/@product.ImageFilename" width="250px" />
+                        <h5>@product.Name</h5>
+                        <p>@product.ShortDescription</p>
+                        <p><strong>@product.Price kr</strong></p>
+                        <div style="width: 100%;">
+                            <a style="float: left; margin-top: 23px;" class="btn btn-primary" asp-controller="Shop" asp-action="ProductDetails" asp-route-id="@product.Id">Visa</a>                    
+                            <form style="float: right;" asp-controller="Shop" asp-action=AddToCart" method="post">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <label for="quantity">Antal:</label>
+                                <input type="number" name="quantity" asp-for="@product.Quantity" value=1 style="width: 60px; float:left; margin-right: 10px;" class="form-control" />
+                                <button class="btn btn-success">Lägg i varukorgen</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

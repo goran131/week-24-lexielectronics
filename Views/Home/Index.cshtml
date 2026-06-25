@@ -1,0 +1,30 @@
+﻿@model IEnumerable<LexiElectronics.Models.Product>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="mainPage homeIndex">
+    <div>
+        <h1 style="margin: 30px 0 15px;">Välkommen</h1>
+        <p>Välkommen till LexiElectronics den enda hemelektronik shop du behöver. Här hittar du allt du behöver inom hemelektronik.</a>.</p>   
+    </div>
+
+    <h2>Våra toppsäljare</h2>
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            <div class="col-md-4">  
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <img class="productImage" src="~/images/@product.ImageFilename" width="250px" />
+                        <h5>@product.Name</h5>
+                        <p>@product.ShortDescription</p>
+                        <p><strong>@product.Price kr</strong></p>
+                        <a class="btn btn-primary" asp-controller="Shop" asp-action="ProductDetails" asp-route-id="@product.Id">Visa</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

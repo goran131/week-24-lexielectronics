@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if(User.Identity?.IsAuthenticated == true && (User.IsInRole("AdminManager") || User.IsInRole("ShopManager")))
+{   <div>
+        @if (User.Identity?.IsAuthenticated == true && (User.IsInRole("AdminManager")))
+        {            
+            <a asp-area="Identity" asp-page="/Account/Register" asp-route-referralCode="true" class="btn btn-primary btnAdminMenu">
+                Registrera användare
+            </a>
+            <a asp-controller="Admin" asp-action="AllUsers" class="btn btn-primary btnAdminMenu">
+                Användare
+            </a>
+        }
+    
+        <a asp-controller="Admin" asp-action="AllProducts" class="btn btn-primary btnAdminMenu">Produkter</a>
+        <a asp-controller="Admin" asp-action="CreateProduct" class="btn btn-primary btnAdminMenu">Skapa produkt</a>
+        <a asp-controller="Admin" asp-action="AllProductCategories" class="btn btn-primary btnAdminMenu">Produktkategorier</a>
+        <a asp-controller="Admin" asp-action="AllManufacturers" class="btn btn-primary btnAdminMenu">Tillverkare</a>
+    </div>
+}

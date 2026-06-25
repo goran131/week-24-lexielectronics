@@ -1,0 +1,25 @@
+﻿@model LexiElectronics.Models.ViewModels.CheckoutVM
+@{
+    ViewData["Title"] = "Checkout finished page";
+}
+<div class="mainPage">
+    @if (@Model.PaymentResult == true)
+    {
+        <div style="font-size: 20px; margin: 50px auto; max-width: 640px; width: 100%" class="successMessage">
+            <strong>Vi har mottagit din order och kommer att behandla den snarast!</strong>
+        </div>
+        <div style="margin-top: 10px; width: 100%; text-align: center;">
+            <a asp-controller="Home" asp-action="Index">Tillbaka till start</a>
+        </div>
+    }
+    else if (@Model.PaymentResult == false)
+    {
+        <div style="font-size: 20px; margin: 50px auto; max-width: 400px; width: 100%" class="failureMessage">
+            <strong>Betalningen av din order misslyckades!</strong>
+        </div>
+
+        <div style="margin-top: 10px; width: 100%; text-align: center;">
+            <a asp-action="Checkout">Tillbaka till kassan</a>
+        </div>
+    }
+</div>

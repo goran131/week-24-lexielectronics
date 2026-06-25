@@ -1,0 +1,36 @@
+@model IEnumerable<LexiElectronics.Models.Order>
+@{
+    ViewData["Title"] = "Mina ordrar";
+}
+
+<div class="shopPage">
+    <h1>Mina ordrar</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ordernr</th>
+                <th>Orderdatum</th>
+                <th>Antal produkter</th>
+                <th>Belopp</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.OrderDate.ToShortDateString()</td>
+                    <td>@order.OrderItems.Count</td>
+                    <td>@order.TotalSumToPay</td>
+                    <td>@order.Status</td>
+                    <td style="width: 115px;">
+                        <a href="@Url.Action("ViewOrder", new { id = order.Id })" class="btn btn-primary">Visa order</a>
+                    </td>                    
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

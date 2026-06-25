@@ -1,0 +1,62 @@
+﻿@model LexiElectronics.Models.Order
+@{
+    ViewData["Title"] = "View Order";
+}
+
+
+<div class="ViewOrder shopPage">
+    
+    <h3 >Ordernr: @Model.Id</h3>
+    <p><strong>Orderdatum:</strong> @Model.OrderDate.ToShortDateString()</p>
+    <p style="margin-bottom: 1.2rem;"><strong>Ditt namn:</strong> @Model.User.Firstname @Model.User.Lastname</p>
+  
+    <p style="margin-bottom: 0rem;"><strong>Fakturaadress:</strong><p>
+    <p>@Model.User.InvoiceName</p>
+    <p>@Model.User.InvoiceStreetAddress</p>
+    <p style="margin-bottom: 1.2rem;">@Model.User.InvoiceZipcode @Model.User.InvoiceCity</p>
+
+    <p style="margin-bottom: 0rem;"><strong>Leveransadress:</strong><p>
+    <p>@Model.User.DeliveryName</p>
+    <p>@Model.User.DeliveryStreetAddress</p>
+    <p style="margin-bottom: 1.2rem;">@Model.User.DeliveryZipcode @Model.User.DeliveryCity</p>
+
+    <p style="margin-bottom: 0.8rem;">
+        <strong>Belopp:</strong> <span asp-for="TotalSum">@Model.TotalSum kr</span>
+    </p>
+    <p style="margin-bottom: 0.8rem;">
+        <strong>Frakt:</strong> <span asp-for="FreightSum">@Model.FreightSum kr</span>
+    </p>
+    <p style="margin-bottom: 1.2rem;">
+        <strong>Belopp att betala:</strong> <span asp-for="TotalSumToPay">@Model.TotalSumToPay kr</span
+    </p>
+    
+    <p style="margin-bottom: 2rem;"><strong>Status:</strong>&nbsp; @Model.Status</p>
+       
+    <h4>Beställda produkter</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Produkt</th>
+                <th>Antal</th>
+                <th>Pris per enhet</th>
+                <th>Totalpris</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (OrderItem item in @Model.OrderItems)
+            {                
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price kr</td>
+                    <td>@item.Sum kr</td>                    
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>        
+        <a asp-action="MyOrders">Tillbaka till mina ordrar</a>
+    </div>
+</div>
