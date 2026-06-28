@@ -1,0 +1,46 @@
+
+
+<Connection name> = "Server=tcp:<your-server>.database.windows.net,1433;Initial Catalog=<your-database>;User ID=<admin-user>;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+
+"DefaultConnection": "Server=tcp:LexiElectronicsServer.database.windows.net,1433;Initial Catalog=LexiElectronicsDB;User ID=lexiAdmin;Password=hnq88833#AB;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+                     Server=tcp:lexielectronics-server.database.windows.net,1433;Initial Catalog=LexiElectronicsDB;Persist Security Info=False;User ID=lexiadmin;Password='hnq88833#%AB';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+
+Skapa  App Service connection string
+az webapp config connection-string set --resource-group LexiElectronics-ResourceGroup --name LexiElectronics --settings DefaultConnection="Server=tcp:lexielectronics-server.database.windows.net,1433;Initial Catalog=LexiElectronicsDb;User ID=lexiadmin;Password=hnq88833AB;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" --connection-string-type SQLAzure
+
+
+Ip adress 85.30.153.187
+
+Skapa sql-server
+az sql server create --name lexielectronics-server --resource-group LexiElectronics-ResourceGroup --location swedencentral --admin-user lexiadmin --admin-password 'hnq88833#AB'
+
+Skapa sql-databas          
+az sql db create --resource-group LexiElectronics-ResourceGroup --server lexielectronics-server --name LexiElectronicsDB --service-objective S0
+
+Allow your IP: 
+az sql server firewall-rule create --resource-group LexiElectronics-ResourceGroup  --server lexielectronics-server --name AllowMyIP --start-ip-address 85.30.153.187 --end-ip-address 85.30.153.187
+
+kör migrationerna
+dotnet ef database update --connection "Server=tcp:lexielectronics-server.database.windows.net,1433;Initial Catalog=LexiElectronicsDB;User ID=lexiadmin;Password=hnq88833AB;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+
+
+
+
+Ändra firewall regler
+az sql server firewall-rule create --resource-group LexiElectronics-ResourceGroup --server lexielectronics-server --name AllowAzure --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
+
+Ändra firewall regler för mitt IP
+az sql server firewall-rule create --resource-group LexiElectronics-ResourceGroup --server lexielectronics-server --name AllowMyIP --start-ip-address 85.30.153.187 --end-ip-address 85.30.153.187
+
+
+Ändra lösenord
+az sql server update --name lexielectronics-server --resource-group LexiElectronics-ResourceGroup --admin-password 'hnq88833AB'
+
+Update SQL server admin password 
+az sql server update --resource-group LexiElectronics-ResourceGroup --name lexielectronics-server --admin-password "hnq88833AB
+
+Starta om web app 
+az webapp restart --resource-group LexiElectronics-ResourceGroup --name LexiElectronics
+
+az login --use-device-code
+

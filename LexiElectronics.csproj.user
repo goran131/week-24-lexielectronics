@@ -17,5 +17,6 @@
     <WebStackScaffolding_DbContextTypeFullName>LexiElectronics.Data.ApplicationDbContext</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
     <WebStackScaffolding_IsViewGenerationSelected>True</WebStackScaffolding_IsViewGenerationSelected>
+    <NameOfLastUsedPublishProfile>E:\Programutveckling\IT-Påbyggnad-programmering-AI\Week-24\LexiElectronics\Properties\PublishProfiles\LexiElectronics - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>
