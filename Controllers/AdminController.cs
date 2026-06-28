@@ -385,15 +385,6 @@ namespace LexiElectronics.Controllers
         }
 
 
-        /**
-        public IActionResult CalcTotalSum()
-        {            
-            order.CalcTotalSum();
-
-            return View(order);
-        }
-        */
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -567,7 +558,6 @@ namespace LexiElectronics.Controllers
 
             appDbContext.ApplicationUsers.Update(dbUser);
 
-
             var roles = await userManager.GetRolesAsync(dbUser); // List<string>
             var role = await roleManager.FindByNameAsync(roles[0]);
             dbUser.UserRoleId = role.Id;
@@ -581,30 +571,6 @@ namespace LexiElectronics.Controllers
 
             return RedirectToAction(nameof(AllUsers));
            
-        }
-
-        public async Task  UpdateUserRoleAsync(string userId, string newRoleId)
-        {
-            var newRole = await roleManager.FindByIdAsync(newRoleId);
-            var user = await userManager.FindByIdAsync(userId);
-            var currentRole = await userManager.GetRolesAsync(user); // List<string>
-          
-            // Remove existing role         
-            var removeResult = await userManager.RemoveFromRolesAsync(user, currentRole);
-
-            if (!removeResult.Succeeded) 
-                throw new InvalidOperationException("Failed to remove roles");
-
-            // Add the new role
-            var addResult = await userManager.AddToRoleAsync(user, newRole.Name);
-
-            if (!addResult.Succeeded) 
-                throw new InvalidOperationException("Failed to add role");
-
-            // Optionally refresh security stamp so active cookies get invalidated
-            var currentUser = await userManager.GetUserAsync(User);
-            if (currentUser != null && currentUser.Id == user.Id)
-                await userManager.UpdateSecurityStampAsync(user);
         }
 
         public async Task<IActionResult> AllManufacturers()
@@ -710,6 +676,30 @@ namespace LexiElectronics.Controllers
                 }
             }
             return RedirectToAction(nameof(AllManufacturers));
+        }
+
+        private async Task UpdateUserRoleAsync(string userId, string newRoleId)
+        {
+            var newRole = await roleManager.FindByIdAsync(newRoleId);
+            var user = await userManager.FindByIdAsync(userId);
+            var currentRole = await userManager.GetRolesAsync(user); // List<string>
+
+            // Remove existing role         
+            var removeResult = await userManager.RemoveFromRolesAsync(user, currentRole);
+
+            if (!removeResult.Succeeded)
+                throw new InvalidOperationException("Failed to remove roles");
+
+            // Add the new role
+            var addResult = await userManager.AddToRoleAsync(user, newRole.Name);
+
+            if (!addResult.Succeeded)
+                throw new InvalidOperationException("Failed to add role");
+
+            // Optionally refresh security stamp so active cookies get invalidated
+            var currentUser = await userManager.GetUserAsync(User);
+            if (currentUser != null && currentUser.Id == user.Id)
+                await userManager.UpdateSecurityStampAsync(user);
         }
 
         // Kontrollerar om användaren är inloggad och har rätt behörighhet

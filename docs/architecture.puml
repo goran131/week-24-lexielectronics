@@ -3,63 +3,61 @@
 skinparam classAttributeIconSize 0
 
 package Controllers {
-  class AdminController {
-	+Index()
-	+ViewAndEditOrder(id)
-	+AllProducts()
-	+ShowProduct(id)
-	+CreateProduct()
-	+SaveCreatedProduct(product)
-	+EditProduct(id)
-	+SaveEditedProduct(product)
-	+AllProductCategories()
-	+CreateProductCategory()
-	+SaveCreatedProductCategory(productCategory)
-	+EditProductCategory(id)
-	+SaveEditedProductCategory(productCategory)
-	+RemoveProductCategory(id)
-	+SaveOrder(order)
-	+RemoveOrder(orderId)
-	+RemoveOrderItem(orderId, orderItemId)
-	+AllUsers()
-	+ShowUser(id)
-	+EditUser(id)
-	+SaveEditedUser(user)
-	-UpdateUserRoleAsync(userId, newRoleId)
-	-IsUserloggedIn()
-  }
+    class HomeController {
+		+Index()
+		+ContactUs()
+	}
+
+	class ShopController {
+		+Index()
+		+ProductDetails(id)
+		+ShoppingCart()
+		+AddToCart(productId, quantity)
+		+RemoveCartItem(productId)	
+		+Checkout()
+		+CheckoutFinished(checkoutVM)
+		+SendOrder()
+		+MyOrders()
+		+ViewOrder()
+		-GetCartFromSession()
+		-SaveCartToSession(cart)
+	}
+
+	class AdminController {
+	  +Index()
+	  +ViewAndEditOrder(id)
+	  +AllProducts()
+	  +ShowProduct(id)
+	  +CreateProduct()
+	  +SaveCreatedProduct(product)
+	  +EditProduct(id)
+	  +SaveEditedProduct(product)
+	  +AllProductCategories()
+	  +CreateProductCategory()
+	  +SaveCreatedProductCategory(productCategory)
+	  +EditProductCategory(id)
+	  +SaveEditedProductCategory(productCategory)
+	  +RemoveProductCategory(id)
+	  +SaveOrder(order)
+	  +RemoveOrder(orderId)
+	  +RemoveOrderItem(orderId, orderItemId)
+	  +AllUsers()
+	  +ShowUser(id)
+	  +EditUser(id)
+	  +SaveEditedUser(user)
+	  +AllManufacturers()
+	  +CreateManufacturer()
+	  +SaveCreatedManufacturer(manufacturer)
+	  +EditManufacturer(id)
+	  +SaveEditedManufacturer(manufacturer)
+      +RemoveManufacturer(id)
+	  -UpdateUserRoleAsync(userId, newRoleId)
+	  -IsUserloggedIn()
+	}
 }
 
 package Models {
-  class Product {
-	+int Id
-	+string Name
-	+string ArticleNo
-	+string ShortDescription
-	+string LongDescription
-	+decimal Price
-	+int Stock
-	+string? ImageFilename
-	+IFormFile? ImageFile
-	+int ProductCategoryId
-	+int ManufacturerId
-	+bool VisibleInShop
-	+ProductCategory Category
-	+Manufacturer Manufacturer
-  }
-
-  class ProductCategory {
-	+int Id
-	+string Name
-	+string Description
-	+List<Product> Products
-  }
-
-  class Manufacturer {
-	+int Id
-	+string BrandName
-  }
-
+	
   class ApplicationUser {
 	+string Id
 	+string Firstname
@@ -74,10 +72,46 @@ package Models {
 	+string? DeliveryStreetAddress
 	+string? DeliveryZipcode
 	+string? DeliveryCity
-	+bool Access
+	+bool PreventAccess
 	+string? UserRoleId
 	+string? UserRoleName
+	+string Discriminator
+	+List<SelectListItem> UserRoleListItems
   }
+
+  class Product {
+	+int Id
+	+string Name
+	+string ArticleNo
+	+string ShortDescription
+	+string LongDescription
+	+decimal Price
+	+int Stock
+	+string? ImageFilename
+	+IFormFile? ImageFile
+	+int ProductCategoryId
+	+int ManufacturerId
+	+bool VisibleInShop
+	+int Quantity 
+	+int nbrOfItemsSold
+	+ProductCategory Category
+	+Manufacturer Manufacturer
+  }
+
+  class ProductCategory {
+	+int Id
+	+string Name
+	+string Description
+	+List<Product> Products
+  }
+
+  class Manufacturer {
+	+int Id
+	+string BrandName
+	+string CompanyName
+	int? NbrOfProducts
+  }
+
 
   class Order {
 	+int Id
@@ -85,6 +119,8 @@ package Models {
 	+ApplicationUser User
 	+DateTime OrderDate
 	+int TotalSum
+	+int FreightSum { get; set; }        
+    +int TotalSumToPay 
 	+string Status
 	+List<OrderItem> OrderItems
   }
@@ -92,22 +128,61 @@ package Models {
   class OrderItem {
 	+int Id
 	+int OrderId
+	+Order Order 
+	+Product Product
 	+int ProductId
 	+int Quantity
-	+decimal Price
-	+Product Product
+	+int Price
+	+int Sum	
   }
+}
 
+package Models.ViewModels {
   class ProductVM {
-	+Product Product
+	+int Id
+	+string Name
+    +string? ArticleNo
+	+string LongDescription
+    +string ShortDescription
+    +int Price
+    +int? Stock
+    +string? ImageFilename
+    +IFormFile? ImageFile
+    +int? ProductCategoryId
+	+int? ManufacturerId
+    +bool VisibleInShop
 	+List<SelectListItem> ProductCategoryListItems
 	+List<SelectListItem> ManufacturerListItems
   }
 
-  class ProductCategoriesVM {
-	+List<ProductCategory> ProductCategoriesList
-	+ProductCategory NewProductCategory
+  class CheckoutVM {
+	+Order order
+    +ApplicationUser User
+    +ShoppingCartDto cartDto
+    +bool DeliveryAddressExists
+    +string ReturnUrl
+    +int TotalSum 
+	+int FreightSum
+    +int TotalSumToPay
+    +decimal Moms
+    +bool PaymentResult
   }
+}
+
+package Models.DTOs {
+  class CartItemDto {
+	+int ProductId
+    +string ProductName
+    +int Price
+    +int Quantity
+    +decimal TotalSum => Price * Quantity;
+  }
+
+  class ShoppingCartDto 
+  {
+    public List<CartItemDto> CartItems { get; set; }
+
+    public decimal TotalSum => CartItems.Sum(i => i.Price * 
 }
 
 ' Associations
@@ -121,8 +196,8 @@ Product "1" -- "*" OrderItem : referencedBy
 class AspNetUsers
 class AspNetRoles
 class AspNetUserRoles
-AspNetUsers "1" -- "*" AspNetUserRoles
-AspNetRoles "1" -- "*" AspNetUserRoles
+AspNetUsers "1" -- "1" AspNetUserRoles
+AspNetRoles "1" -- "1" AspNetUserRoles
 
 ' Notes
 note left of AdminController

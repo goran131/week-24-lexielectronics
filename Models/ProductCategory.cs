@@ -13,7 +13,7 @@ namespace LexiElectronics.Models
        
         public string Description { get; set; }
 
-        // [NotMapped]
+        [NotMapped]
         public List<Product> Products { get; set; } = new List<Product>();
 
         public ProductCategory() { }

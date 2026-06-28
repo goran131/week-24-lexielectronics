@@ -57,16 +57,6 @@ namespace LexiElectronics.Controllers
             return View(cart);
         }
 
-        private ShoppingCartDto GetCartFromSession()
-        {
-            var json = HttpContext.Session.GetString(SessionKeyCart);
-            return string.IsNullOrEmpty(json) ? new ShoppingCartDto() : System.Text.Json.JsonSerializer.Deserialize<ShoppingCartDto>(json)!;
-        }
-
-        private void SaveCartToSession(ShoppingCartDto cart)
-        {
-            HttpContext.Session.SetString(SessionKeyCart, System.Text.Json.JsonSerializer.Serialize(cart));
-        }   
 
         public IActionResult AddToCart(int productId, int quantity)
         {
@@ -225,6 +215,17 @@ namespace LexiElectronics.Controllers
                 item.Sum = item.Quantity * item.Price;
             }
             return View(order);
+        }
+
+        private ShoppingCartDto GetCartFromSession()
+        {
+            var json = HttpContext.Session.GetString(SessionKeyCart);
+            return string.IsNullOrEmpty(json) ? new ShoppingCartDto() : System.Text.Json.JsonSerializer.Deserialize<ShoppingCartDto>(json)!;
+        }
+
+        private void SaveCartToSession(ShoppingCartDto cart)
+        {
+            HttpContext.Session.SetString(SessionKeyCart, System.Text.Json.JsonSerializer.Serialize(cart));
         }
     }
 }
