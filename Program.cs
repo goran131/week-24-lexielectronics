@@ -82,7 +82,11 @@ namespace LexiElectronics
                 {
                     appDbContext.Database.Migrate();
 
+<<<<<<< HEAD
                     var scriptPath = "./Arkiv/LexiElectronics.data.sql";
+=======
+                    var scriptPath = Path.Combine(AppContext.BaseDirectory, "Arkiv", "LexiElectronics.data.sql");
+>>>>>>> 9afb6b5244185e01eb1bdc943dd83e37ff363f07
                     var sqlScript = File.ReadAllText(scriptPath);
 
                     using (var connection = appDbContext.Database.GetDbConnection())
