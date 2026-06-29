@@ -13,7 +13,7 @@
     
     <h1 class="display-4">Välkommen!</h1>
     <p>Detta är LexiElectronics adminavdelning.</p>
-    <h4 class="adminHeader2">Nya ordrar</h4>
+    <h4 class="adminHeader2">Mottagna ordrar, alltså nya ordrar</h4>
     <table class="table">
         <thead>
             <tr>
@@ -38,7 +38,7 @@
                         <td>@order.TotalSumToPay kr</td>
                         <td>@order.Status</td>
                         <td style="width: 115px;">
-                            <a href="@Url.Action("ViewAndEditOrder", new { id = order.Id })" class="btn btn-primary">Visa order</a>
+                            <a href="@Url.Action("ViewAndEditOrder", new { id = order.Id })" class="btn btn-primary">Visa</a>
                         </td>
                         <form asp-controller="Admin" asp-action="RemoveOrder" method="post">
                             <input type="hidden" name="orderId" value="@order.Id" />
@@ -52,7 +52,7 @@
         </tbody>
     </table>
 
-    <h4 class="adminHeader2">Ordrar under behandling</h4>
+    <h4 class="adminHeader2">Pågående ordrar, alltså ordrar under behandling</h4>
      <table class="table">
         <thead>
             <tr>
@@ -77,7 +77,7 @@
                         <td>@order.TotalSumToPay kr</td>
                         <td>@order.Status</td>
                         <td style="width: 115px;">
-                            <a href="@Url.Action("ViewAndEditOrder", new { id = order.Id })" class="btn btn-primary">Visa order</a>
+                            <a href="@Url.Action("ViewAndEditOrder", new { id = order.Id })" class="btn btn-primary">Visa</a>
                         </td>
                         <form asp-controller="Admin" asp-action="RemoveOrder" method="post">
                             <input type="hidden" name="orderId" value="@order.Id" />
@@ -116,7 +116,7 @@
                         <td>@order.TotalSumToPay kr</td>
                         <td>@order.Status</td>
                         <td style="width: 115px;">
-                            <a href="@Url.Action("ViewAndEditOrder", new { id = order.Id })" class="btn btn-primary">Visa order</a>
+                            <a href="@Url.Action("ViewAndEditOrder", new { id = order.Id })" class="btn btn-primary">Visa</a>
                         </td>
                         <form asp-controller="Admin" asp-action="RemoveOrder" method="post">
                             <input type="hidden" name="orderId" value="@order.Id" />

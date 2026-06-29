@@ -78,10 +78,10 @@ namespace LexiElectronics
             {
                 var appDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                if (!appDbContext.Users.Any())
-                {
-                    appDbContext.Database.Migrate();
+                appDbContext.Database.Migrate();
 
+                if (!appDbContext.Users.Any())
+                {                
                     var scriptPath = "./Arkiv/LexiElectronics.data.sql";
 
                     var sqlScript = File.ReadAllText(scriptPath);

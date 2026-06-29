@@ -21,7 +21,12 @@ header, .footer {
     padding: 0 30px 10px;
 }
 
-.adminPage, .shopPage{
+.p-tag-homeIndex {
+    font-size: 18px; 
+    max-width: 600px;
+}
+
+.adminPage, .shopPage {
     padding: 25px 20px 0;
     clear: both;
 }
@@ -269,7 +274,10 @@ body {
     .ManageProfile .profile-div, .ManageProfile #update-profile-button {
         width: 380px !important;
     }
-}
+
+    .p-tag-homeIndex {
+        font-size: 17px;
+    }
 
 
 
