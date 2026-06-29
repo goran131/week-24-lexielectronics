@@ -104,9 +104,19 @@ namespace LexiElectronics.Controllers
             {
                 List<Product> allProducts = appDbContext.Products.ToList();
 
+                List<OrderItem> orderItems = appDbContext.OrderItems.ToList();
+
                 foreach (Product product in allProducts)
                 {
                     product.Category = appDbContext.ProductCategories.Find(product.ProductCategoryId);
+
+                    foreach (OrderItem item in orderItems)
+                    {
+                        if (product.Id == item.ProductId)
+                        {
+                            product.nbrOfItemsSold = product.nbrOfItemsSold + item.Quantity;
+                        }
+                    }
                 }
 
                 allProducts = allProducts.OrderBy(p => p.Category.Name).ThenBy(p => p.Price).ToList();
@@ -128,6 +138,16 @@ namespace LexiElectronics.Controllers
                 Product product = appDbContext.Products.Find(Id);
                 product.Category = appDbContext.ProductCategories.Find(product.ProductCategoryId);
                 product.Manufacturer = appDbContext.Manufacturers.Find(product.ManufacturerId);
+
+                List<OrderItem> orderItems = appDbContext.OrderItems.ToList();
+
+                foreach (OrderItem item in orderItems)
+                {
+                    if (product.Id == item.ProductId)
+                    {
+                        product.nbrOfItemsSold = product.nbrOfItemsSold + item.Quantity;
+                    }
+                }
 
                 return View(product);
             }
